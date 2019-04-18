@@ -39,11 +39,13 @@ namespace Chess.Interpreter
 
         public void PrevStep()
         {
+            _outputText.text = "";
             _boardManager.MakeStepBack();
         }
 
         public void NextStep()
         {
+            _outputText.text = "";
             Context context = new Context(_inputText.text, ref _boardManager);
             if (context.IsAllRight())
             {
