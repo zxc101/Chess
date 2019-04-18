@@ -37,12 +37,17 @@ namespace Chess.Interpreter
             }
         }
 
-        private void NextStep()
+        public void PrevStep()
+        {
+            _boardManager.MakeStepBack();
+        }
+
+        public void NextStep()
         {
             Context context = new Context(_inputText.text, ref _boardManager);
             if (context.IsAllRight())
             {
-                _boardManager.MakeStep(context.StartPosition, context.EndPosition);
+                _boardManager.MakeStepForward(context.StartPosition, context.EndPosition);
             }
             else
             {

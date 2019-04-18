@@ -6,7 +6,10 @@ namespace Chess.Managers
     public interface IBoardManager
     {
         Position GetPosition(string namePosition);
-        void MakeStep(string startPosition, string endPosition);
+
         EFigureColor GetPlayerColor();
+
+        void MakeStepForward(string startPosition, string endPosition);
+        void MakeStepBack();
     }
 }

@@ -100,6 +100,9 @@ namespace Chess.Managers
         
         private Dictionary<string, Position> _blackMap;
         private Dictionary<string, Position> _whiteMap;
+        
+        private Stack<string> _startSteps;
+        private Stack<string> _endSteps;
 
         private EFigureColor _playerColor;
 
@@ -265,6 +268,9 @@ namespace Chess.Managers
 
             _blackMap = new Dictionary<string, Position>();
             _whiteMap = new Dictionary<string, Position>();
+
+            _startSteps = new Stack<string>();
+            _endSteps = new Stack<string>();
 
             blackCamera.SetActive(false);
             _playerColor = EFigureColor.White;
@@ -553,7 +559,26 @@ namespace Chess.Managers
             }
         }
 
-        public void MakeStep(string startPosition, string endPosition)
+        public void MakeStepBack()
+        {
+            if (_startSteps.Count > 0)
+            {
+                string startPosition = _startSteps.Pop();
+                string endPosition = _endSteps.Pop();
+
+                MakeStep(GetReflectedNamePosition(endPosition), GetReflectedNamePosition(startPosition));
+            }
+        }
+
+        public void MakeStepForward(string startPosition, string endPosition)
+        {
+            _startSteps.Push(startPosition);
+            _endSteps.Push(endPosition);
+
+            MakeStep(startPosition, endPosition);
+        }
+
+        private void MakeStep(string startPosition, string endPosition)
         {
             GameObject figure;
 
