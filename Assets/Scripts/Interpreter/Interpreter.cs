@@ -2,49 +2,55 @@
 using UnityEngine.UI;
 using Zenject;
 
-public class Interpreter : MonoBehaviour, IUpdate
+using Chess.Managers;
+using Chess.UpdateControllers;
+
+namespace Chess.Interpreter
 {
-    private IBoardManager _boardManager;
-
-    private InputField _inputText;
-
-    private InputField _outputText;
-
-    [Inject]
-    public void Setup(IBoardManager boardManager)
+    public class Interpreter : MonoBehaviour, IUpdate
     {
-        _boardManager = boardManager;
-    }
+        private IBoardManager _boardManager;
 
-    private void OnValidate()
-    {
-        _inputText = transform.Find("InputText").gameObject.GetComponent<InputField>();
-        _outputText = transform.Find("OutputText").gameObject.GetComponent<InputField>();
+        private InputField _inputText;
 
-        FindObjectOfType<UpdateController>()?.AddFixedUpdate(this);
-    }
+        private InputField _outputText;
 
-    public void OnUpdate()
-    {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        [Inject]
+        public void Setup(IBoardManager boardManager)
         {
-            NextStep();
+            _boardManager = boardManager;
         }
-    }
 
-    public void NextStep()
-    {
-        Context context = new Context(_inputText.text, ref _boardManager);
-        if (context.IsAllRight())
+        private void OnValidate()
         {
-            _boardManager.MakeStep(context.StartPosition, context.EndPosition);
+            _inputText = transform.Find("InputText").gameObject.GetComponent<InputField>();
+            _outputText = transform.Find("OutputText").gameObject.GetComponent<InputField>();
+
+            FindObjectOfType<UpdateController>()?.AddFixedUpdate(this);
         }
-        else
+
+        public void OnUpdate()
         {
-            System.Collections.Generic.Stack<string> Errors = context.GetErrors();
-            while (context.GetErrors().ToArray().Length > 0)
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
             {
-                _outputText.text = $"Error: {Errors.Pop()}\n";
+                NextStep();
+            }
+        }
+
+        private void NextStep()
+        {
+            Context context = new Context(_inputText.text, ref _boardManager);
+            if (context.IsAllRight())
+            {
+                _boardManager.MakeStep(context.StartPosition, context.EndPosition);
+            }
+            else
+            {
+                System.Collections.Generic.Stack<string> Errors = context.GetErrors();
+                while (context.GetErrors().ToArray().Length > 0)
+                {
+                    _outputText.text = $"Error: {Errors.Pop()}\n";
+                }
             }
         }
     }

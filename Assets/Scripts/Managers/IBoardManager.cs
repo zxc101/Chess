@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using Chess.Configuration;
+using Chess.Enums;
 
-public interface IBoardManager
+namespace Chess.Managers
 {
-    Position GetPosition(string namePosition);
-    void MakeStep(string startPosition, string endPosition);
-    EFigureColor GetPlayerColor();
+    public interface IBoardManager
+    {
+        Position GetPosition(string namePosition);
+        void MakeStep(string startPosition, string endPosition);
+        EFigureColor GetPlayerColor();
+    }
 }

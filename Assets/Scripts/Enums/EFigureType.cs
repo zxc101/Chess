@@ -1,10 +1,13 @@
-﻿public enum EFigureType
+﻿namespace Chess.Enums
 {
-    Rock,
-    Knight,
-    Bishop,
-    King,
-    Queen,
-    Pown,
-    None
+    public enum EFigureType
+    {
+        Rock,
+        Knight,
+        Bishop,
+        King,
+        Queen,
+        Pown,
+        None
+    }
 }

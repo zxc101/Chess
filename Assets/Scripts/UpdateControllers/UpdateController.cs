@@ -1,21 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class UpdateController : MonoBehaviour
+namespace Chess.UpdateControllers
 {
-    private readonly List<IUpdate> _UpdatesList = new List<IUpdate>();
-
-    public void AddFixedUpdate(IUpdate update)
+    public class UpdateController : MonoBehaviour
     {
-        _UpdatesList.Add(update);
-    }
+        private readonly List<IUpdate> _UpdatesList = new List<IUpdate>();
 
-    private void FixedUpdate()
-    {
-        foreach (IUpdate update in _UpdatesList)
+        internal void AddFixedUpdate(IUpdate update)
         {
-            update.OnUpdate();
+            _UpdatesList.Add(update);
+        }
+
+        private void FixedUpdate()
+        {
+            foreach (IUpdate update in _UpdatesList)
+            {
+                update.OnUpdate();
+            }
         }
     }
 }

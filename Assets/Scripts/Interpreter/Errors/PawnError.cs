@@ -1,117 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnError
+using Chess.Configuration;
+using Chess.Enums;
+
+namespace Chess.Errors
 {
-    public static List<string> ErrorMove(Position startPosition, Position endPosition)
+    public class PawnError : AbstractFigureAbleJumpError
     {
-        const int STEP = 10;
-        const int START_POSITION = 25;
+        private const int START_POSITION = 25;
+        private const int STEP = 10;
 
-        List<string> Errors = new List<string>();
-        
-        EFigureColor startColor = EFigureColor.None;
-        Vector3 startPos = startPosition.GetPosition();
-        
-        EFigureColor endColor = EFigureColor.None;
-        Vector3 endPos = endPosition.GetPosition();
-
-        RaycastHit hit;
-
-        if (startPosition.GetFigure())
+        internal PawnError(Position startPosition, Position endPosition) : base(startPosition, endPosition)
         {
-            startColor = startPosition.GetFigure().GetComponent<FigureConfiguration>().GetColor();
+            ErrorMove();
         }
 
-        if (endPosition.GetFigure())
-        {
-            endColor = endPosition.GetFigure().GetComponent<FigureConfiguration>().GetColor();
-        }
+        internal override List<string> GetError() => Errors;
 
-        if(startPos == endPos)
+        protected override void ErrorMove()
         {
-            Errors.Add("Пешка не может атаковать себя");
-        }
-
-        if(Physics.Raycast(startPos, endPos - startPos, out hit, Mathf.Sqrt(Mathf.Pow(Mathf.Abs(startPos.x - endPos.x), 2) + Mathf.Pow(Mathf.Abs(startPos.z - endPos.z), 2))))
-        {
-            if(hit.transform.position != endPos)
+            // Передвижение
+            if (endColor == EFigureColor.None)
             {
-                switch (hit.transform.name.Substring(5))
+                if (
+                     !(
+                        startColor == EFigureColor.White &&
+                            (startPos.z == -START_POSITION &&
+                                (endPos - startPos) == Vector3.forward * STEP || (endPos - startPos) == Vector3.forward * STEP * 2) ||
+                            (startPos.z > -START_POSITION &&
+                                (endPos - startPos) == Vector3.forward * STEP)
+
+                                ||
+
+                        startColor == EFigureColor.Black &&
+                            (startPos.z == START_POSITION &&
+                                (endPos - startPos) == -Vector3.forward * STEP || (endPos - startPos) == -Vector3.forward * STEP * 2) ||
+                            (startPos.z < START_POSITION &&
+                                (endPos - startPos) == -Vector3.forward * STEP)
+                      )
+                   )
                 {
-                    case "Rock":
-                        Errors.Add($"Пешка не может перескочить ладью");
-                        break;
-                    case "Knight":
-                        Errors.Add($"Пешка не может перескочить коня");
-                        break;
-                    case "Bishop":
-                        Errors.Add($"Пешка не может перескочить слона");
-                        break;
-                    case "King":
-                        Errors.Add($"Пешка не может перескочить короля");
-                        break;
-                    case "Queen":
-                        Errors.Add($"Пешка не может перескочить королеву");
-                        break;
-                    case "Pawn":
-                        Errors.Add($"Пешка не может перескочить другую пешку");
-                        break;
+                    Errors.Add($"{name} не может так ходить");
                 }
             }
-        }
-
-        // Передвижение
-        if (endColor == EFigureColor.None)
-        {
-            if (
-                 !(
-                    startColor == EFigureColor.White &&
-                        (startPos.z == -START_POSITION &&
-                            (endPos - startPos) == Vector3.forward * STEP || (endPos - startPos) == Vector3.forward * STEP * 2) ||
-                        (startPos.z > -START_POSITION &&
-                            (endPos - startPos) == Vector3.forward * STEP)
-                            
-                            ||
-
-                    startColor == EFigureColor.Black &&
-                        (startPos.z == START_POSITION &&
-                            (endPos - startPos) == -Vector3.forward * STEP || (endPos - startPos) == -Vector3.forward * STEP * 2) ||
-                        (startPos.z < START_POSITION &&
-                            (endPos - startPos) == -Vector3.forward * STEP)
-                  )
-               )
-            {
-                Errors.Add($"Пешка не может так ходить");
-            }
-        }
-        // Атака
-        else
-        {
-            if (
-                    startColor == EFigureColor.White &&
-                        (startPos.z >= -START_POSITION &&
-                            (endPos - startPos) == (Vector3.forward + Vector3.left) * STEP || (endPos - startPos) == (Vector3.forward - Vector3.left) * STEP)
-
-                            ||
-
-                    startColor == EFigureColor.Black &&
-                        (startPos.z <= START_POSITION &&
-                            (endPos - startPos) == (-Vector3.forward + Vector3.left) * STEP || (endPos - startPos) == (-Vector3.forward - Vector3.left) * STEP)
-               )
-            {
-                if (startColor == endColor)
-                {
-                    Errors.Add($"Пешка не может атаковать своих");
-                }
-            }
+            // Атака
             else
             {
-                Errors.Add($"Пешка не может так атаковать");
+                if (
+                        startColor == EFigureColor.White &&
+                            (startPos.z >= -START_POSITION &&
+                                (endPos - startPos) == (Vector3.forward + Vector3.left) * STEP || (endPos - startPos) == (Vector3.forward - Vector3.left) * STEP)
+
+                                ||
+
+                        startColor == EFigureColor.Black &&
+                            (startPos.z <= START_POSITION &&
+                                (endPos - startPos) == (-Vector3.forward + Vector3.left) * STEP || (endPos - startPos) == (-Vector3.forward - Vector3.left) * STEP)
+                   )
+                {
+                    if (startColor == endColor)
+                    {
+                        Errors.Add($"{name} не может атаковать своих");
+                    }
+                }
+                else
+                {
+                    Errors.Add($"{name} не может так атаковать");
+                }
             }
         }
-
-        return Errors;
     }
 }

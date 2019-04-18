@@ -1,4 +1,7 @@
-﻿public interface IFixedUpdate
+﻿namespace Chess.UpdateControllers
 {
-    void OnFixedUpdate();
+    public interface IFixedUpdate
+    {
+        void OnFixedUpdate();
+    }
 }

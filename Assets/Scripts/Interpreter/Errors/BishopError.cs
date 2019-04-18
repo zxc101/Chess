@@ -1,83 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class BishopError
+using Chess.Configuration;
+using Chess.Enums;
+
+namespace Chess.Errors
 {
-    public static List<string> ErrorMove(Position startPosition, Position endPosition)
+    public class BishopError : AbstractFigureAbleJumpError
     {
-        List<string> Errors = new List<string>();
-        
-        EFigureColor startColor = EFigureColor.None;
-        Vector3 startPos = startPosition.GetPosition();
-
-        EFigureColor endColor = EFigureColor.None;
-        Vector3 endPos = endPosition.GetPosition();
-
-        RaycastHit hit;
-
-        if (startPosition.GetFigure())
+        internal BishopError(Position startPosition, Position endPosition) : base(startPosition, endPosition)
         {
-            startColor = startPosition.GetFigure().GetComponent<FigureConfiguration>().GetColor();
+            ErrorMove();
         }
 
-        if (endPosition.GetFigure())
-        {
-            endColor = endPosition.GetFigure().GetComponent<FigureConfiguration>().GetColor();
-        }
+        internal override List<string> GetError() => Errors;
 
-        if (startPos == endPos)
+        protected override void ErrorMove()
         {
-            Errors.Add("Слон не может атаковать себя");
-        }
-
-        if (Physics.Raycast(startPos, endPos - startPos, out hit, Mathf.Sqrt(Mathf.Pow(Mathf.Abs(startPos.x - endPos.x), 2) + Mathf.Pow(Mathf.Abs(startPos.z - endPos.z), 2))))
-        {
-            if (hit.transform.position != endPos)
+            if (Mathf.Abs(startPos.x - endPos.x) - Mathf.Abs(startPos.z - endPos.z) == 0)
             {
-                switch (hit.transform.name.Substring(5))
+                if (startColor == endColor)
                 {
-                    case "Rock":
-                        Errors.Add($"Слон не может перескочить ладью");
-                        break;
-                    case "Knight":
-                        Errors.Add($"Слон не может перескочить коня");
-                        break;
-                    case "Bishop":
-                        Errors.Add($"Слон не может перескочить другого слона");
-                        break;
-                    case "King":
-                        Errors.Add($"Слон не может перескочить короля");
-                        break;
-                    case "Queen":
-                        Errors.Add($"Слон не может перескочить королеву");
-                        break;
-                    case "Pawn":
-                        Errors.Add($"Слон не может перескочить пешку");
-                        break;
+                    Errors.Add($"{name} не может атаковать своих");
                 }
-            }
-        }
-
-        if(Mathf.Abs(startPos.x - endPos.x) - Mathf.Abs(startPos.z - endPos.z) == 0)
-        {
-            if (startColor == endColor)
-            {
-                Errors.Add($"Слон не может атаковать своих");
-            }
-        }
-        else
-        {
-            if (endColor == EFigureColor.None)
-            {
-                Errors.Add($"Слон не может так ходить");
             }
             else
             {
-                Errors.Add($"Слон не может так атаковать");
+                if (endColor == EFigureColor.None)
+                {
+                    Errors.Add($"{name} не может так ходить");
+                }
+                else
+                {
+                    Errors.Add($"{name} не может так атаковать");
+                }
             }
         }
-
-        return Errors;
     }
 }

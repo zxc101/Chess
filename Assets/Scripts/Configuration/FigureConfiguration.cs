@@ -1,19 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class FigureConfiguration : MonoBehaviour
+using Chess.Enums;
+
+namespace Chess.Configuration
 {
-    [SerializeField] private EFigureColor _color;
-    [SerializeField] private EFigureType _type;
-
-    public EFigureColor GetColor()
+    public class FigureConfiguration : MonoBehaviour
     {
-        return _color;
-    }
+        [SerializeField] private EFigureColor _color;
+        [SerializeField] private EFigureType _type;
 
-    public EFigureType GetFigureType()
-    {
-        return _type;
+        internal EFigureColor GetColor()
+        {
+            return _color;
+        }
+
+        internal EFigureType GetType()
+        {
+            return _type;
+        }
     }
 }

@@ -1,6 +1,9 @@
-﻿public enum EFigureColor
+﻿namespace Chess.Enums
 {
-    Black,
-    White,
-    None
+    public enum EFigureColor
+    {
+        Black,
+        White,
+        None
+    }
 }

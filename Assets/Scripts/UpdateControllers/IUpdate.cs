@@ -1,4 +1,7 @@
-﻿public interface IUpdate
+﻿namespace Chess.UpdateControllers
 {
-    void OnUpdate();
+    public interface IUpdate
+    {
+        void OnUpdate();
+    }
 }

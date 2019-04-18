@@ -1,55 +1,60 @@
 ﻿using UnityEngine;
 
-public class Position : MonoBehaviour
+using Chess.Enums;
+
+namespace Chess.Configuration
 {
-    [SerializeField] private GameObject _figure;
-    private Vector3 position;
-
-    public GameObject GetFigure()
+    public class Position : MonoBehaviour
     {
-        return _figure;
-    }
+        [SerializeField] private GameObject _figure;
+        private Vector3 position;
 
-    public void SetFigure(GameObject newFigure)
-    {
-        if (newFigure)
+        internal GameObject GetFigure()
         {
-            if (_figure)
+            return _figure;
+        }
+
+        internal void SetFigure(GameObject newFigure)
+        {
+            if (newFigure)
             {
-                if(newFigure == _figure)
-                    _figure = GameObject.Find(newFigure.name);
+                if (_figure)
+                {
+                    if (newFigure == _figure)
+                        _figure = GameObject.Find(newFigure.name);
+                }
+                else
+                {
+                    _figure = Instantiate(newFigure, transform.position, Quaternion.identity);
+                    _figure.name = newFigure.name;
+
+                    if (_figure.GetComponentInChildren<Light>())
+                        _figure.GetComponentInChildren<Light>().enabled = true;
+
+                    if (_figure.GetComponent<FigureConfiguration>().GetColor() == EFigureColor.Black)
+                    {
+                        _figure.transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
+                }
             }
             else
             {
-                _figure = Instantiate(newFigure, transform.position, Quaternion.identity);
-                _figure.name = newFigure.name;
-
-                if (_figure.GetComponentInChildren<Light>())
-                    _figure.GetComponentInChildren<Light>().enabled = true;
-
-                if (_figure.GetComponent<FigureConfiguration>().GetColor() == EFigureColor.Black)
+                if (_figure)
                 {
-                    _figure.transform.rotation = Quaternion.Euler(0, 180, 0);
+                    Destroy(_figure);
+                    _figure = null;
                 }
             }
         }
-        else
+
+        private void OnValidate()
         {
-            if (_figure)
-            {
-                Destroy(_figure);
-                _figure = null;
-            }
+            position = transform.position;
         }
-    }
 
-    private void OnValidate()
-    {
-        position = transform.position;
-    }
-
-    public Vector3 GetPosition()
-    {
-        return position;
+        internal Vector3 GetPosition()
+        {
+            return position;
+        }
     }
 }

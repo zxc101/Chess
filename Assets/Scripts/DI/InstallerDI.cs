@@ -1,9 +1,14 @@
 using Zenject;
 
-public class InstallerDI : MonoInstaller<InstallerDI>
+using Chess.Managers;
+
+namespace Chess.DI
 {
-    public override void InstallBindings()
+    public class InstallerDI : MonoInstaller<InstallerDI>
     {
-        Container.Bind<IBoardManager>().To<BoardManager>().AsSingle();
+        public override void InstallBindings()
+        {
+            Container.Bind<IBoardManager>().To<BoardManager>().AsSingle();
+        }
     }
 }
