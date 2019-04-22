@@ -73,10 +73,10 @@ namespace Chess.Errors
                                 Errors.Add($"{name} отказывается атаковать своего коня");
                                 break;
                             case EFigureType.Pown:
-                                Errors.Add($"{name} верна своей королеве");
+                                Errors.Add($"{name} отказывается атаковать свою пешку");
                                 break;
                             case EFigureType.Queen:
-                                Errors.Add($"{name} не может атаковать свою королеву");
+                                Errors.Add($"{name} верна своей королеве");
                                 break;
                             case EFigureType.Rock:
                                 Errors.Add($"{name} отказывается атаковать свою ладью");

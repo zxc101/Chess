@@ -56,7 +56,7 @@ namespace Chess.Interpreter
                 System.Collections.Generic.Stack<string> Errors = context.GetErrors();
                 while (context.GetErrors().ToArray().Length > 0)
                 {
-                    _outputText.text += $"Error: {Errors.Pop()}\n\n";
+                    _outputText.text += $"{Errors.Pop()}\n\n";
                 }
             }
         }

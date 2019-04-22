@@ -41,46 +41,54 @@ namespace Chess.Errors
         private bool ErrorСheckingPositions(string[] positions)
         {
             bool b = false;
-            foreach (string position in positions)
+            for (int i = 0; i < positions.Length; i++)
             {
-                if (position.Equals(""))
+                if (positions[i].Equals(""))
                 {
-                    Errors.Push("Одна из позиций пустая.");
+                    switch (i)
+                    {
+                        case 0:
+                            Errors.Push($"Первая позиция пустая.");
+                            break;
+                        case 1:
+                            Errors.Push($"Вторая позиция пустая.");
+                            break;
+                    }
                     b = true;
                     continue;
                 }
 
-                if (position.Length < 2 || position.Length > 2)
+                if (positions[i].Length < 2 || positions[i].Length > 2)
                 {
-                    Errors.Push($"Название {position} не приемлимо, так как оно должно состоять из одной буквы и одной цифры");
+                    Errors.Push($"Название позиции {positions[i]} не приемлимо, так как оно должно состоять из одной буквы и одной цифры");
                     b = true;
                     continue;
                 }
 
-                if (ErrorLetterPosition(position[0]) && ErrorNumberPosition(position[1]))
+                if (!ErrorLetterPosition(positions[i][1]) && !ErrorNumberPosition(positions[i][0]))
                 {
-                    Errors.Push($"Позиция {position} записана не в том порядке");
+                    Errors.Push($"Позиция {positions[i]} записана не в том порядке");
                     b = true;
                     continue;
                 }
 
-                if (ErrorLetterPosition(position[0]))
+                if (ErrorLetterPosition(positions[i][0]))
                 {
                     int numberPosition;
-                    if (int.TryParse(position[0].ToString(), out numberPosition))
+                    if (int.TryParse(positions[i][0].ToString(), out numberPosition))
                     {
-                        Errors.Push($"На месте цифры {position[0]} должна быть буква");
+                        Errors.Push($"На месте цифры {positions[i][0]} должна быть буква");
                     }
                     else
                     {
-                        Errors.Push($"Позиции с буквой \"{position[0]}\" не существует");
+                        Errors.Push($"Позиции с буквой \"{positions[i][0]}\" не существует");
                     }
                     b = true;
                 }
 
-                if (ErrorNumberPosition(position[1]))
+                if (ErrorNumberPosition(positions[i][1]))
                 {
-                    Errors.Push($"Позиции с цифрой \"{position[1]}\" не существует");
+                    Errors.Push($"Позиции с цифрой \"{positions[i][1]}\" не существует");
                     b = true;
                 }
             }
@@ -110,11 +118,10 @@ namespace Chess.Errors
             {
                 if (numberPosition < 1 || numberPosition > 8)
                 {
-                    return false;
+                    return true;
                 }
-                return false;
             }
-            return true;
+            return false;
         }
 
         private bool ErrorPosition(string position, IBoardManager boardManager)
