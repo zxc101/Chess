@@ -73,7 +73,7 @@ public abstract class AbstractFigureError
     {
         if (startPos == endPos)
         {
-            Errors.Add($"{name} не может атаковать себя");
+            Errors.Add($"{name} отказывается совершить самоубийство");
         }
     }
 
