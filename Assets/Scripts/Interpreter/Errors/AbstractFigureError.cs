@@ -12,9 +12,11 @@ public abstract class AbstractFigureError
     protected Vector3 startPos;
 
     protected EFigureColor endColor;
+    protected EFigureType endTepe;
     protected Vector3 endPos;
 
     protected string name;
+    protected string targetName;
 
     internal AbstractFigureError(Position startPosition, Position endPosition)
     {
@@ -42,6 +44,7 @@ public abstract class AbstractFigureError
         if (endPosition.GetFigure())
         {
             endColor = endPosition.GetFigure().GetComponent<FigureConfiguration>().GetColor();
+            endTepe = endPosition.GetFigure().GetComponent<FigureConfiguration>().GetType();
         }
     }
 

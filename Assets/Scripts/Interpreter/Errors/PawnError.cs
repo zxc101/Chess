@@ -61,7 +61,27 @@ namespace Chess.Errors
                 {
                     if (startColor == endColor)
                     {
-                        Errors.Add($"{name} не может атаковать своих");
+                        switch (endTepe)
+                        {
+                            case EFigureType.Bishop:
+                                Errors.Add($"{name} не может атаковать своего слона");
+                                break;
+                            case EFigureType.King:
+                                Errors.Add($"{name} не может атаковать своего короля");
+                                break;
+                            case EFigureType.Knight:
+                                Errors.Add($"{name} не может атаковать своего коня");
+                                break;
+                            case EFigureType.Pown:
+                                Errors.Add($"{name} не может атаковать свою пешку");
+                                break;
+                            case EFigureType.Queen:
+                                Errors.Add($"{name} не может атаковать свою королеву");
+                                break;
+                            case EFigureType.Rock:
+                                Errors.Add($"{name} не может атаковать свою ладью");
+                                break;
+                        }
                     }
                 }
                 else
